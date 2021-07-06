@@ -81,10 +81,14 @@ export const Home = () => {
     return (
         <div className='container'>
             <div className="content">
-                <h1>Situação Financeira</h1>
-                <p>Mês atual: {dateValue.month}</p>
-                <p>Ano atual: {dateValue.year}</p>
+                <div className="contentTitle">
+                    <h1>Situação Financeira</h1>
+                    <button className="cadastrarButton" type="button" onClick={() => prev()}>Cadastrar</button>
+                </div>
+
                 <div className='contentButton'>
+                    <p>Mês atual: <span className="dateSpan">{dateValue.month}</span></p>
+                    <p>Ano atual: <span className="dateSpan">{dateValue.year}</span></p>
                     <button type="button" onClick={() => prev()}>Anterior</button>
                     <button type="button" onClick={() => next()}>Proximo</button>
                 </div>
@@ -103,19 +107,19 @@ export const Home = () => {
                             <tr key={res.id}>
                                 <td>{res.id}</td>
                                 <td>{res.nome}</td>
-                                <td>{res.tipo === 1 ? <p>Débito</p> : <p>Crédito</p> }</td>
-                                <td>{res.status === 1 ? <p>Efetuado</p> : <p>Pendente</p> }</td>
+                                <td>{res.tipo === 1 ? <span className="debitSpan">Débito</span> : <span className="creditSpan">Crédito</span>}</td>
+                                <td>{res.status === 1 ? <span className="creditSpan">Efetuado</span> : <span className="debitSpan">Pendente</span>}</td>
                                 <td>{res.valor}</td>
                             </tr>
                         ))}
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td>Total</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>899.98</td>
+                            <th>Total</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>899.98</th>
                         </tr>
                     </tfoot>
                 </table>

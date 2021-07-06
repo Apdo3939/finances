@@ -1,75 +1,128 @@
-h1{
-    margin: 24px;
+h1 {
     font-size: 48px;
+    color    : blue;
 }
 
-p{
-    margin: 24px;
-    font-size: 18px;
+p {
+    font-size    : 20px;
+    color        : lightgray;
+    margin-bottom: 12px;
 }
 
-.container{
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
+.dateSpan {
+    color      : orange;
+    font-weight: 700;
+}
+
+.container {
+    width          : 100vw;
+    height         : 100vh;
+    display        : flex;
+    align-items    : center;
     justify-content: center;
-    background: lightblue;
-    color: aliceblue;
+    background     : gray;
+    background     : linear-gradient(90deg, gray 0%, lightgray 50%, gray 100%);
+    color          : lightgray;
 }
 
-.content{
-    background-color: cadetblue;
-    display: block;
-    align-items: center;
+.content {
+    background     : rgb(126, 106, 69);
+    background     : linear-gradient(90deg, rgba(126, 106, 69, 1) 25%, rgba(126, 121, 255, 1) 100%);
+    display        : block;
+    align-items    : center;
     justify-content: center;
+    border-radius  : 8px;
+    max-width      : 900px;
+    width          : 90%;
+    height         : 90%;
+    padding        : 20px;
+}
+
+.contentTitle {
+    max-width      : 900px;
+    display        : flex;
+    align-items    : center;
+    justify-content: space-between;
+    background     : lightgray;
+    border-radius  : 8px;
+    margin         : 24px;
+    padding        : 8px;
+}
+
+.cadastrarButton {
+    background: white;
+    color     : blue;
+}
+
+.cadastrarButton:hover {
+    background: blue;
+    color     : white;
+}
+
+.contentButton {
+    max-width      : 900px;
+    height         : 120px;
+    display        : block;
+    margin         : 24px;
+    align-items    : center;
+    justify-content: center;
+}
+
+button {
+    background   : white;
+    color        : orange;
+    width        : 150px;
+    height       : 50px;
+    margin-right : 16px;
+    border       : 0;
     border-radius: 8px;
-    width: 90%;
-    height: 90%;
-    padding: 20px; 
+    font-size    : large;
+    cursor       : pointer;
 }
 
-.contentButton{
-    width: '100%';
-    height: 60px;
-    display: flex;
-    margin: 24px;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-button{
-    background: orangered;
-    color: aliceblue;
-    width: 150px;
-    height: 50px;
-    margin-right: 16px;
-    border: 0;
-    border-radius: 8px;
-    font-size: large;
-}
-
-button:hover{
+button:hover {
     background-color: orange;
-    font-weight: bold;
+    color           : white;
+    font-weight     : bold;
 }
 
-table{
-    width: 600px;
-    height: "100%";
-    margin: 24px;
-    font-size: 16px;
+table {
+    width     : 100%;
+    max-width : 850px;
+    margin    : 24px;
+    font-size : 16px;
     text-align: left;
-    padding: 8px;
-    border: 1px solid aliceblue;
+    padding   : 8px;
+    border    : 1px solid aliceblue;
 }
-th{
-    border: 1px solid aliceblue;
+
+th {
+    border    : 1px solid aliceblue;
     text-align: center;
-    padding: 8px;
-    color: blue;
+    padding   : 10px;
+    color     : blue;
 }
-td{
-    border: 1px solid aliceblue;
+
+td {
+    border    : 1px solid aliceblue;
     text-align: center;
+    padding   : 8px;
+    color     : lightgray;
+    font-size : large;
+}
+
+.debitSpan {
+    color      : orangered;
+    font-size  : 18px;
+    font-weight: 700;
+    padding    : 12px;
+
+}
+
+.creditSpan {
+    color      : green;
+    font-size  : 18px;
+    font-weight: 700;
+    padding    : 12px;
+
 }
