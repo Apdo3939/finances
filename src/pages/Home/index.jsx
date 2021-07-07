@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import './styles.css';
+import api from '../../config/configApi';
+import moment from 'moment';
+import { span } from "prelude-ls";
+
 
 export const Home = () => {
 
@@ -11,69 +15,78 @@ export const Home = () => {
         year,
         month
     });
+    const [saldo, setSaldo] = useState("");
+    const [status, setStatus] = useState({
+        type: '',
+        message: '',
+    });
 
     const prev = async () => {
         if (dateValue.month === 1) {
+            year = dateValue.year - 1;
+            month = 12;
             setDateValue({
-                year: dateValue.year - 1,
-                month: 12
+                year,
+                month
             });
+            listFinances(month, year);
         } else {
+            year = dateValue.year;
+            month = dateValue.month - 1;
             setDateValue({
-                year: dateValue.year,
-                month: dateValue.month - 1
+                year,
+                month
             });
-
+            listFinances(month, year);
         }
     }
     const next = async () => {
         if (dateValue.month === 12) {
+            year = dateValue.year + 1;
+            month = 1;
             setDateValue({
-                year: dateValue.year + 1,
-                month: 1
+                year,
+                month
             });
+            listFinances(month, year);
         } else {
+            year = dateValue.year;
+            month = dateValue.month + 1;
             setDateValue({
-                year: dateValue.year,
-                month: dateValue.month + 1
+                year,
+                month
             });
-
+            listFinances(month, year);
         }
     }
 
-    const listFinances = async () => {
-        var values = [
-            {
-                'id': 1,
-                'nome': 'Conta de luz',
-                'valor': 80,
-                'tipo': 1,
-                'status': 1
-            },
-            {
-                'id': 2,
-                'nome': 'Conta de telefone',
-                'valor': 159.90,
-                'tipo': 1,
-                'status': 1
-            },
-            {
-                'id': 3,
-                'nome': 'Conta de cartão de crédito',
-                'valor': 659.90,
-                'tipo': 1,
-                'status': 2
-            },
-            {
-                'id': 4,
-                'nome': 'Salário',
-                'valor': 1100,
-                'tipo': 2,
-                'status': 1
-            }
-        ]
+    const listFinances = async (month, year) => {
 
-        setData(values);
+        if (month === undefined && year === undefined) {
+            var currentDate = new Date();
+            month = currentDate.getMonth() + 1;
+            year = currentDate.getFullYear();
+        }
+
+        await api.get('/listar/' + month + '/' + year)
+            .then((response) => {
+                setData(response.data.lancamentos);
+                setSaldo(response.data.saldo);
+            })
+            .catch((err) => {
+                if (err.response) {
+                    setStatus({
+                        type: 'erro',
+                        message: err.response.data.message,
+                    });
+                } else {
+                    setStatus({
+                        type: 'erro',
+                        message: 'Erro: Tente mais tarde!',
+                    });
+                }
+                console.log("Erro de conexão!" + err);
+            });
     }
 
     useEffect(() => { listFinances() }, []);
@@ -85,7 +98,7 @@ export const Home = () => {
                     <h1>Situação Financeira</h1>
                     <button className="cadastrarButton" type="button" onClick={() => prev()}>Cadastrar</button>
                 </div>
-
+                {status.type === 'erro' ? <span className="spanError">{status.message}</span> : ''}
                 <div className='contentButton'>
                     <p>Mês atual: <span className="dateSpan">{dateValue.month}</span></p>
                     <p>Ano atual: <span className="dateSpan">{dateValue.year}</span></p>
@@ -99,6 +112,7 @@ export const Home = () => {
                             <th>Nome</th>
                             <th>Tipo</th>
                             <th>Status</th>
+                            <th>Vencimento</th>
                             <th>Valor</th>
                         </tr>
                     </thead>
@@ -109,17 +123,19 @@ export const Home = () => {
                                 <td>{res.nome}</td>
                                 <td>{res.tipo === 1 ? <span className="debitSpan">Débito</span> : <span className="creditSpan">Crédito</span>}</td>
                                 <td>{res.status === 1 ? <span className="creditSpan">Efetuado</span> : <span className="debitSpan">Pendente</span>}</td>
-                                <td>{res.valor}</td>
+                                <td>{moment(res.vencimento).format('DD/MM/YYYY')}</td>
+                                <td>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(res.valor)}</td>
                             </tr>
                         ))}
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>Total</th>
+                            <th>Saldo</th>
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th>899.98</th>
+                            <th></th>
+                            <th>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(saldo)}</th>
                         </tr>
                     </tfoot>
                 </table>
