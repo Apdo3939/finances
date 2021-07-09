@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import './styles.css';
 import api from '../../config/configApi';
 import moment from 'moment';
-import { span } from "prelude-ls";
-
 
 export const Home = () => {
 
@@ -72,6 +71,10 @@ export const Home = () => {
             .then((response) => {
                 setData(response.data.lancamentos);
                 setSaldo(response.data.saldo);
+                setStatus({
+                    type: 'success',
+                    message: response.data.message,
+                });
             })
             .catch((err) => {
                 if (err.response) {
@@ -89,16 +92,19 @@ export const Home = () => {
             });
     }
 
-    useEffect(() => { listFinances() }, []);
+    useEffect(() => { listFinances(month, year) }, [month, year]);
 
     return (
         <div className='container'>
             <div className="content">
                 <div className="contentTitle">
                     <h1>Situação Financeira</h1>
-                    <button className="cadastrarButton" type="button" onClick={() => prev()}>Cadastrar</button>
+                    <Link to="/cadastrar">
+                        <button className="cadastrarButton" type="button" >Cadastrar</button>
+                    </Link>
                 </div>
                 {status.type === 'erro' ? <span className="spanError">{status.message}</span> : ''}
+                {status.type === 'success' ? <span className="spanSucess">{status.message}</span> : ''}
                 <div className='contentButton'>
                     <p>Mês atual: <span className="dateSpan">{dateValue.month}</span></p>
                     <p>Ano atual: <span className="dateSpan">{dateValue.year}</span></p>
@@ -114,6 +120,7 @@ export const Home = () => {
                             <th>Status</th>
                             <th>Vencimento</th>
                             <th>Valor</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -125,6 +132,10 @@ export const Home = () => {
                                 <td>{res.status === 1 ? <span className="creditSpan">Efetuado</span> : <span className="debitSpan">Pendente</span>}</td>
                                 <td>{moment(res.vencimento).format('DD/MM/YYYY')}</td>
                                 <td>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(res.valor)}</td>
+                                <td>
+                                    <Link to={`/editar/${res.id}`} ><button>Editar</button></Link>
+                                    <button> Apagar</button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -136,6 +147,7 @@ export const Home = () => {
                             <th></th>
                             <th></th>
                             <th>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(saldo)}</th>
+                            <th></th>
                         </tr>
                     </tfoot>
                 </table>
