@@ -92,7 +92,34 @@ export const Home = () => {
             });
     }
 
-    useEffect(() => { listFinances(month, year) }, [month, year]);
+    const handleDeleteLancamentos = async (idLancamento) => {
+        const headers = { 'Content-Type': 'application/json' }
+        api.delete('/apagar/' + idLancamento, { headers })
+            .then(res => {
+                setStatus({
+                    type: 'success',
+                    message: res.data.message,
+                });
+                listFinances();
+            })
+            .catch((err) => {
+                if (err.response) {
+                    setStatus({
+                        type: 'erro',
+                        message: err.response.data.message,
+                    });
+                } else {
+                    setStatus({
+                        type: 'erro',
+                        message: 'Erro: Tente mais tarde!',
+                    });
+                }
+                console.log("Erro de conexão!" + err);
+            });
+    }
+
+
+    useEffect(() => { listFinances() }, []);
 
     return (
         <div className='container'>
@@ -133,8 +160,8 @@ export const Home = () => {
                                 <td>{moment(res.vencimento).format('DD/MM/YYYY')}</td>
                                 <td>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(res.valor)}</td>
                                 <td>
-                                    <Link to={`/editar/${res.id}`} ><button>Editar</button></Link>
-                                    <button> Apagar</button>
+                                    <Link to={`/editar/${res.id}`} ><button className="editarButton">Editar</button></Link>
+                                    <Link to={'#'}><button className="apagarButton" onClick={() => handleDeleteLancamentos(res.id)}> Apagar</button></Link>
                                 </td>
                             </tr>
                         ))}

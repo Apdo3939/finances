@@ -73,6 +73,25 @@ p {
     color     : white;
 }
 
+.editarButton {
+    background: white;
+    color     : green;
+}
+
+.apagarButton {
+    background: white;
+    color : red;
+}
+
+.editarButton:hover {
+    background: green;
+    color     : white;
+}
+.apagarButton:hover {
+    background: red;
+    color     : white;
+}
+
 .contentButton {
     max-width      : 900px;
     height         : 120px;
